@@ -36,7 +36,7 @@ help BSA.m
 % set the default parameters
 if nargin < 1
     %FitFunc = @Sphere;
-    M = 5;   
+    M = 267;   
     pop = 30;  
     dim = 4;   
     FQ = 10;   
@@ -53,7 +53,7 @@ ub= [2 30 30 700];    % Upper bounds
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 s1=pwd; %Identify current folder
 %s2=['\erroresFPA0910-' num2str(k1) '.txt'];
-s2='\erroresBSA2210.txt';
+s2='\erroresBSA2310(3).txt';
 dir = strcat(s1,s2);
 %--crear arhivo para guardar errores
 error1= fopen(dir, 'wt');
@@ -131,11 +131,13 @@ fprintf(error1,['\n----------------------------------------\n\n']);
             for i = (pop/2+1) : pop
                 x( i, : ) = x( i, : ) * ( 1 + randn );
                 x( i, : ) = Bounds( x( i, : ), lb, ub );
+                x=round(x);
                 fit( i ) = FitFunc1( x( i, : ) );
             end
             if choose == 1 
                 x( minIndex,: ) = x( minIndex,: ) * ( 1 + randn );
                 x( minIndex, : ) = Bounds( x( minIndex, : ), lb, ub );
+                x=round(x);
                 fit( minIndex ) = FitFunc1( x( minIndex, : ) );
             end
             for i = 1 : 0.5*pop
@@ -143,6 +145,7 @@ fprintf(error1,['\n----------------------------------------\n\n']);
                     person = randi( [(0.5*pop+1), pop ], 1 );
                     x( i, : ) = x( i, : ) + (pX(person, :) - x( i, : )) * FL( i );
                     x( i, : ) = Bounds( x( i, : ), lb, ub );
+                    x=round(x);
                     fit( i ) = FitFunc1( x( i, : ) );
                 end
             end
@@ -150,11 +153,13 @@ fprintf(error1,['\n----------------------------------------\n\n']);
             for i = 1 : 0.5*pop
                 x( i, : ) = x( i, : ) * ( 1 + randn );
                 x( i, : ) = Bounds( x( i, : ), lb, ub );
+                x=round(x);
                 fit( i ) = FitFunc1( x( i, : ) );
             end
             if choose == 4 
                 x( minIndex,: ) = x( minIndex,: ) * ( 1 + randn );
                 x( minIndex, : ) = Bounds( x( minIndex, : ), lb, ub );
+                x=round(x);
                 fit( minIndex ) = FitFunc1( x( minIndex, : ) );
             end
             for i = (0.5*pop+1) : pop
@@ -162,6 +167,7 @@ fprintf(error1,['\n----------------------------------------\n\n']);
                     person = randi( [1, 0.5*pop], 1 );
                     x( i, : ) = x( i, : ) + (pX(person, :) - x( i, : )) * FL( i );
                     x( i, : ) = Bounds( x( i, : ), lb, ub );
+                    x=round(x);
                     fit( i ) = FitFunc1( x( i, : ) );
                 end
             end   
