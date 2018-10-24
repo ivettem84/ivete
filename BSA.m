@@ -36,8 +36,8 @@ help BSA.m
 % set the default parameters
 if nargin < 1
     %FitFunc = @Sphere;
-    M = 267;   
-    pop = 30;  
+    M = 114;
+    pop = 70;
     dim = 4;   
     FQ = 10;   
     c1 = 1.5;
@@ -48,12 +48,12 @@ end
 comienza=now;
 
 % set the parameters
-lb= [1 1 1 1];   % Lower bounds
+lb= [1 1 1 50];   % Lower bounds
 ub= [2 30 30 700];    % Upper bounds
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 s1=pwd; %Identify current folder
 %s2=['\erroresFPA0910-' num2str(k1) '.txt'];
-s2='\erroresBSA2310(3).txt';
+s2='\erroresBSA2310(8).txt';
 dir = strcat(s1,s2);
 %--crear arhivo para guardar errores
 error1= fopen(dir, 'wt');
@@ -88,24 +88,24 @@ fprintf(error1,['\n----------------------------------------\n\n']);
         meanP = mean( pX );
         for i = 1 : pop
             if rand < prob(i)
-                x( i, : ) =round( x( i, : ) + c1 * rand.*(bestX - x( i, : ))+ ...
+                x( i, : ) = round( x( i, : ) + c1 * rand.*(bestX - x( i, : ))+ ...
                     c2 * rand.*( pX(i,:) - x( i, : ) ));
             else
                 person = randiTabu( 1, pop, i, 1 );
                 
-                x( i, : ) = round(x( i, : ) + rand.*(meanP - x( i, : )) * a1 * ...
+                x( i, : ) = round( x( i, : ) + rand.*(meanP - x( i, : )) * a1 * ...
                     exp( -pFit(i)/( sumPfit + realmin) * pop ) + a2 * ...
                     ( rand*2 - 1) .* ( pX(person,:) - x( i, : ) ) * exp( ...
                     -(pFit(person) - pFit(i))/(abs( pFit(person)-pFit(i) )...
                     + realmin) * pFit(person)/(sumPfit + realmin) * pop )); 
             end
-            
+           
             x( i, : ) = Bounds( x( i, : ), lb, ub );  
             fit( i ) = FitFunc1( x( i, : ) );
               
         end
+         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        fprintf(error1,['Error:' num2str(fit(iteration)) ' Iteracion:' int2str(iteration) ' Individuos:' int2str(iteration) ' Capas: ' int2str(x(iteration,1)) ' Neuronas capa 1: ' int2str(x(iteration,2))  ' Neuronas Capa 2: ' int2str(x(iteration,3)) ' Epocas: ' int2str(x(iteration,4)) '\n']);
     else
         FL = rand( pop, 1 ) .* 0.4 + 0.5;    %The followed coefficient
         
@@ -144,7 +144,6 @@ fprintf(error1,['\n----------------------------------------\n\n']);
                 if choose == 2 || minIndex ~= i
                     person = randi( [(0.5*pop+1), pop ], 1 );
                     x( i, : ) = x( i, : ) + (pX(person, :) - x( i, : )) * FL( i );
-                    x( i, : ) = Bounds( x( i, : ), lb, ub );
                     x=round(x);
                     fit( i ) = FitFunc1( x( i, : ) );
                 end
@@ -189,8 +188,10 @@ fprintf(error1,['\n----------------------------------------\n\n']);
         end
     end
     
-
-    
+   
+      fprintf(error1,['Error:' num2str(fit(i)) ' Iteracion:' int2str(iteration)  ' Individuos:' int2str(pop) ' Capas: ' int2str(x(i,1)) ' Neuronas capa 1: ' int2str(x(i,2))  ' Neuronas Capa 2: ' int2str(x(i,3)) ' Epocas: ' int2str(x(i,4)) '\n']);
+     
+     
  end
 termina=now;%%%%%%%%% TIEMPO FINAL
 fprintf(error1,['\n----------------------------------------\n\n']);
